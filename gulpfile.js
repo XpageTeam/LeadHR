@@ -37,7 +37,37 @@ gulp.task('browser-sync', () =>  {
 		"dist/js/*.js",
 		"dist/*.html",
 	]).on("change", browserSync.reload);
-});
+})
+
+gulp.task("svg", e => 
+	gulp.src("./src/img/ico-*.svg")
+		.pipe($.svgmin({
+			js2svg: {
+				pretty: true
+			}
+		}))
+		.pipe($.cheerio({
+			run($){
+				$("[fill]").removeAttr("fill")
+
+				$("[stroke]").removeAttr("stroke")
+
+				$("[style]").removeAttr("style")
+			},
+			parserOptions: {
+				xmlMode: true
+			}
+		}))
+		.pipe($.replace("^gt;", ">"))
+		.pipe(require("gulp-svg-sprite")({
+			mode: {
+				symbol: {
+					sprite: "sprite.svg"
+				}
+			}
+		}))
+		.pipe(gulp.dest("src/pug/"))
+)
 
 gulp.task("postcss", _ => 
 	gulp.src([
@@ -132,21 +162,21 @@ gulp.task("deploy", gulp.series(gulp.parallel("postcss", "pug", "imagemin"), "de
 
 const local = _ => {
 	var WP = process.exec("npm run webpack");
-	gulp.watch(["src/sss/*.sss"], gulp.series("postcss"));
-	gulp.watch('src/pug/**/*', gulp.series("pug"));
-	// gulp.watch("src/js/*.js", gulp.series("babel"));
-	gulp.watch("src/img/**/*", gulp.series("imagemin"));
+	gulp.watch(["src/sss/*.sss"], gulp.series("postcss"))
+	gulp.watch('src/pug/**/*', gulp.series("pug"))
+	gulp.watch("src/img/**/*", gulp.series("imagemin"))
+	gulp.watch("src/img/**/*.svg", gulp.series("svg"))
 },
 watch = _ => {
-	gulp.watch("dist/css/**/*", gulp.series("deploy:css"));
-	gulp.watch("dist/js/*.js", gulp.series("deploy:js"));
-	gulp.watch("dist/img/**/*", gulp.series("deploy:img"));
+	gulp.watch("dist/css/**/*", gulp.series("deploy:css"))
+	gulp.watch("dist/js/*.js", gulp.series("deploy:js"))
+	gulp.watch("dist/img/**/*", gulp.series("deploy:img"))
 };
 
 gulp.task("deploy-to-server", gulp.series(gulp.parallel("postcss", "pug", "imagemin"), gulp.parallel(local, watch)));
 
 gulp.task("finish:him", gulp.series(gulp.parallel("postcss", "imagemin"), gulp.parallel("deploy:css", "deploy:js")));
 
-gulp.task("default", gulp.series(gulp.parallel("postcss", "pug", "imagemin", "move:fonts"), gulp.parallel(local, "browser-sync")))
+gulp.task("default", gulp.series(gulp.parallel("postcss", "pug", "imagemin", "move:fonts", "svg"), gulp.parallel(local, "browser-sync")))
 
 gulp.task('clearcache', (callback) => { $.cache.clearAll(); callback();});

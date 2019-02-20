@@ -39,6 +39,9 @@ html(lang="ru")
 											| и технологическим компаниям
 											br 
 											| создать команду мечты
+						.page-content__decors
+							.top-puddle
+							.right-puddle
 			section.page(data-anchor="text")
 				.page__content
 					.page-content
@@ -60,5 +63,6 @@ html(lang="ru")
 									each title in ["Разработка", "Дизайн", "Маркетинг", "Клиентский сервис", "Другие направления", ]
 										li.main-nav__item
 											a.main-nav__link(href="#")=title
-		include inc/footer.pug
+		#sprite(style="display: none")
+			include symbol/sprite.svg
 		include inc/scripts.pug
