@@ -11,15 +11,6 @@ const $ = require("gulp-load-plugins")(),
 let process = require("child_process"),
 	connectionSettings = require("./accesses/accesses.js");
 
-const xpager_path = "/www/html.xpager.ru/"+connectionSettings.xpager.dirName,
-xpager_conn = ftp.create({
-	host:      connectionSettings.xpager.host,
-	user:      connectionSettings.xpager.file,
-	password:  connectionSettings.xpager.password,
-	parallel: 4,
-	log: gutil.log
-});
-
 const templatePath = connectionSettings.server.path;
 const remotePathCss = templatePath+"css",
 	remotePathJs = templatePath+"js",
@@ -32,8 +23,6 @@ const server_conn = ftp.create({
 	parallel: 4,
 	log: gutil.log
 });
-
-
 
 gulp.task('browser-sync', () =>  {
 	browserSync.init({
@@ -156,18 +145,6 @@ watch = _ => {
 	gulp.watch("dist/js/*.js", gulp.series("deploy:js"));
 	gulp.watch("dist/img/**/*", gulp.series("deploy:img"));
 };
-
-gulp.task("deploy:zip", () => 
-	gulp.src([
-			"**/*.*",
-			"!node_modules/**",
-			"!bower_components/**",
-			"!dist/**",
-			"!*.zip"
-			])
-		.pipe($.zip("app.zip"))
-		.pipe(xpager_conn.dest(xpager_path))
-);
 
 gulp.task("deploy-to-server", gulp.series(gulp.parallel("postcss", "pug", "imagemin"), gulp.parallel(local, watch)));
 
