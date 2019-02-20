@@ -52,9 +52,6 @@ gulp.task("postcss", _ =>
 			}),
 			require("postcss-short"),
 			require("postcss-preset-env"),
-			require("postcss-inline-svg")({
-					xmlns: false,
-				}),
 			require("postcss-assets"),
 			require("autoprefixer"),
 			require("postcss-flexbugs-fixes"),
