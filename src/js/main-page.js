@@ -91,6 +91,27 @@ document.addEventListener("DOMContentLoaded", e => {
 			afterLoad: function(origin, destination, direction){
 				document.body.classList.remove("loading")
 				document.body.classList.add("loaded")
+
+				;(function(){
+					let main = document.querySelector("#content"),
+						sheetsSvg = document.querySelector(".main-decor__sheets");
+
+					if (!main || !sheetsSvg)
+						return
+
+					main.addEventListener("mousemove", e => {
+						let pos = {
+					      x: 0,
+					      y: 0,
+					    };
+
+					    pos.x = (e.pageX - sheetsSvg.clientWidth / 2) * -1 / 55;
+					    pos.y = (e.pageY - sheetsSvg.clientHeight / 2) * -1 / 55;
+
+					    sheetsSvg.style.transform = "translate3d("+pos.x+"px, "+pos.y+"px, 0)"
+					})
+				})()
+
 			},
 			afterRender: function(){},
 			afterResize: function(width, height){},

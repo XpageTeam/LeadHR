@@ -19,8 +19,13 @@ html(lang="ru")
 											a.main-nav__link(href="#")=title
 								.main-nav__decor
 									.main-decor
-				figure.page__decor
-					img(src="img")
+										.main-decor__sheets
+											svg.ico
+												use(xlink:href="#ico-sheets")
+						.page-content__decors
+							.puddles
+								svg.ico
+									use(xlink:href="#ico-puddles")
 			section.page(data-anchor="about")
 				.page__content.page__content--white
 					.page-content
@@ -39,9 +44,6 @@ html(lang="ru")
 											| и технологическим компаниям
 											br 
 											| создать команду мечты
-						.page-content__decors
-							.top-puddle
-							.right-puddle
 			section.page(data-anchor="text")
 				.page__content
 					.page-content
