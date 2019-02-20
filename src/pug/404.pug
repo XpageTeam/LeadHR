@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+html(lang="ru")
+	head
+		meta(charset="utf-8")
+		title Ошибка 404
+		include inc/head.pug
+		include inc/css.pug
+	body.inner.loading.page-404
+		include inc/header.pug
+		
+		main#content
+			.content
+				.inner-content
+					.inner-content__content
+						.wrapper
+							.error-404
+								.error-404__number 404
+								.error-404__title К сожалению, запрашиваемая страница не найдена
+								.error-404__text 
+									p Что-то пошло не так, страница больше не существует. 
+									p Пожалуйста, перейдите на 
+										a(href="#") главную страницу 
+										| сайта.
+
+		include inc/footer.pug
+		include inc/scripts.pug

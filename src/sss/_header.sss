@@ -1,0 +1,60 @@
+.main
+
+	.head
+		position: fixed 0 0 * 0
+		z-index: 10
+
+.head
+	padding: 90px 0 60px
+
+	&__wrap
+		display: flex
+		align-items: center
+
+	&__logo
+		margin-right: auto
+		flex: none
+
+	&__phone
+		margin-right: 80px
+
+	&__burger
+		margin-right: 16px
+
+.logo
+
+	img
+		display: block
+
+.h-phone
+	font-size: 18px
+
+	a
+		color: inherit
+
+.burger
+	padding: 16px
+	margin: -16px
+	box-sizing: content-box
+	display: flex
+	flex-direction: column
+	size: 23px 18px
+	justify-content: space-between
+	background: none
+	border: none
+	color: inherit
+	cursor: pointer
+	transition: color .3s ease
+
+	&:before, &:after
+		content: ""
+
+	&:before, &:after, span
+		background: currentColor
+		height: 2px
+
+	&:before
+		width: calc(100% - 4px)
+
+	&:focus, &.js__active
+		color: var(--mainColor)

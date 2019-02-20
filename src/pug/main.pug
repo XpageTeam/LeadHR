@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+html(lang="ru")
+	head
+		meta(charset="utf-8")
+		title Главная
+		include inc/head.pug
+		include inc/css.pug
+	body.main.loading
+		include inc/header.pug
+		main#content
+			section.page(data-anchor="nav")
+				.page__content
+					.page-content
+						.wrapper
+							nav.main-nav
+								ul.main-nav__menu.main-nav__menu--countered
+									each title in ["Вакансии", "Компаниям", "Отправить резюме", "Обучение", "Блог", ]
+										li.main-nav__item
+											a.main-nav__link(href="#")=title
+								.main-nav__decor
+									.main-decor
+				figure.page__decor
+					img(src="img")
+			section.page(data-anchor="about")
+				.page__content.page__content--white
+					.page-content
+						.wrapper
+							.page-text
+								.page-text__title
+									.main-title Находим 
+										br 
+										| нужных людей
+										br
+										| в digital
+								.page-text__text
+									.text-page
+										p Помогаем digital-агентствам 
+											br
+											| и технологическим компаниям
+											br 
+											| создать команду мечты
+			section.page(data-anchor="text")
+				.page__content
+					.page-content
+						.wrapper
+							.page-text
+								.page-text__title
+									.main-title Почему мы?
+								.page-text__text
+									.text-page
+										p Мы собираем и развиваем IT-команды. В этом наша цель и миссия.
+										p Обычные HR-агентства не понимают специфику диджитал. Наша отрасль растёт для них слишком быстро — они просто не успевают за трендами и требованиями. Подобрать хорошего программиста, верстальщика, смм-щика — не то же самое, что найти продавца или менеджера. Нужно понимание изнутри, как работает и чем живёт digital. Так мы начали искать людей для себя. Теперь этот опыт — ваш.
+			section.page(data-anchor="directions")
+				.page__content.page__content--white
+					.page-content
+						.wrapper
+							nav.main-nav
+								.main-nav__title Направления
+								ul.main-nav__menu
+									each title in ["Разработка", "Дизайн", "Маркетинг", "Клиентский сервис", "Другие направления", ]
+										li.main-nav__item
+											a.main-nav__link(href="#")=title
+		include inc/footer.pug
+		include inc/scripts.pug

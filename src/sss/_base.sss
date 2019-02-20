@@ -1,0 +1,464 @@
+html
+	font-size: 100%
+
+input, a, button, textarea, select
+	outline: none
+
+*::-webkit-input-placeholder
+	color: #adb4c6
+	opacity: 1
+
+*:-moz-placeholder
+	color: #adb4c6
+	opacity: 1
+
+*::-moz-placeholder
+	color: #adb4c6
+	opacity: 1
+
+*:-ms-input-placeholder
+	color: #adb4c6
+	opacity: 1
+
+.slick-arrow
+	border: none
+	background: none
+	padding: 0
+	text-indent: -9999px
+	overflow: hidden
+
+.swiper-button-disabled
+	opacity: .5
+	pointer-events: none
+
+.slick-slide
+	height: auto !important
+
+input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], input:not([type]), textarea, select, input[type="submit"], button
+	-webkit-appearance: none
+	appearance: none
+	font: inherit
+
+	&:focus
+
+		&::-webkit-input-placeholder
+			opacity: 0
+
+		&:-moz-placeholder
+			opacity: 0
+
+		&::-moz-placeholder
+			opacity: 0
+
+		&:-ms-input-placeholder
+			opacity: 0
+
+input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], input:not([type]), textarea, select
+	border-radius: 0
+
+// #{$all-text-inputs}
+
+// 	&:not(.form-control):not(.comment-form__text)
+	
+// 		&::-webkit-input-placeholder
+// 			color: #fff
+// 			opacity: 1
+
+// 		&:-moz-placeholder
+// 			color: #fff
+// 			opacity: 1
+
+// 		&::-moz-placeholder
+// 			color: #fff
+// 			opacity: 1
+
+// 		&:-ms-input-placeholder
+// 			color: #fff
+// 			opacity: 1
+
+*, *:after, *:before
+	box-sizing: border-box
+
+*[v-cloak]
+	display: none
+
+i.rub
+	font-family: "Roboto"
+	font-style: normal
+
+address
+	font-weight: inherit
+
+body
+	min-width: 320px
+	line-height: lh(22, 16)
+	font-family: var(--default-font)
+	font-weight: 400
+	font-size: 16px
+	background: #fff
+	color: #000
+	position: relative
+	left: 0
+	display: flex
+	flex-direction: column
+	width: 100%
+	min-height: 100vh
+
+	&.main
+		background: var(--secondColor)
+
+select
+	-webkit-appearance: none
+	/* for FF */
+	-moz-appearance: none
+	text-indent: 0.01px
+	text-overflow: ''
+	/* for IE */
+	-ms-appearance: none
+	appearance: none!important
+
+	&::-ms-expand 
+		display: none
+
+.head, .footer
+	flex: none
+
+#content
+	height: 100%
+	// display: flex
+	flex-direction: column
+	transition: transform .8s ease
+	will-change: transform
+	z-index: 2
+
+a
+	color: #000
+	font-weight: inherit
+	text-decoration: none
+
+	&[href^="tel"], &[href^="mail"]
+		white-space: nowrap
+
+	&:not([class])
+		color: var(--mainColor)
+		border-bottom: 1px solid transparent
+
+		&:hover, &:focus
+			border-color: currentColor
+
+.wrapper
+	// width: var(--baseWidth)
+	max-width: var(--base-width)
+	padding: 0 2rem
+	margin: 0 auto
+	box-sizing: content-box
+
+input[type="submit"], button
+	cursor: pointer
+
+img, svg
+	max-width: 100%
+
+li
+	list-style: none
+
+.table-wrap
+	position: relative
+
+	&__track
+		overflow-x: auto
+		-webkit-overflow-scrolling: touch
+
+	&__shadow
+		width: 12px
+		position: absolute 0 *
+		pointer-events: none
+		background: linear-gradient(to right, rgba(#fff, .0001), rgba(#000, .1))
+		opacity: 0
+
+		&--left
+			left: 0	
+			transform: rotateZ(180deg)
+
+		&--right
+			right: 0	
+
+.soc
+	display: flex
+	flex-wrap: wrap
+	margin-bottom: -10px
+
+	&__link
+		display: flex
+		align-items: center
+		justify-content: center
+		margin-bottom: 10px
+
+		&:not(:last-child)
+			margin-right: 30px
+
+// @supports (-webkit-mask-image: url())
+// 	.soc__link
+// 		background: #fff !important
+// 		-webkit-mask-size: contain !important
+
+// 		&:hover, &:focus
+// 			background: var(--mainColor) !important
+
+// @supports (mask-image: url())
+// 	.soc__link
+// 		background: #fff !important
+// 		mask-size: contain !important
+
+// 		&:hover, &:focus
+// 			background: var(--mainColor) !important
+
+.quality-btn
+	border-radius: 30px
+	background: url("../img/ico-quality.png") left 36px center no-repeat
+	background-color: var(--mainColor)
+	transition: background-color .3s ease
+	color: #fff
+	display: inline-block
+	padding: 15px 27px 16px 60px
+
+	&:hover, &:focus
+		background-color: lighten(#cb2b21, .1)
+
+.swiper-list
+	overflow: hidden
+
+.default-btn
+	border-radius: 31px
+	padding: 15px 39px 17px
+	line-height: 1
+	border: 1px solid var(--mainColor)
+	color: #fff var(--mainColor)
+	display: inline-block
+	transition: background .3s ease
+	white-space: nowrap
+
+	&:hover, &:focus
+		background: #df2f24
+
+.category
+	position: relative
+	background: #eeeded
+	padding: 9px 14px 11px 36px
+	border-radius: 6px
+
+	&:before
+		content: ""
+		position: absolute calc(50% - 5px) * * 15px
+		border-radius: 50%
+		size: 9px
+
+	&--context
+
+		&:before
+			background: #8a3b8c
+
+	&--media
+
+		&:before
+			background: #be481a
+
+	&--soc
+
+		&:before
+			background: #5a358f
+
+.arrow-btn
+	border-radius: 27px
+	color: #fff var(--mainColor)
+	display: inline-block
+	padding: 13px 34px 17px
+	position: relative
+	transition: background .3s ease
+
+	&:hover, &:focus
+		background: #df2f24
+
+	&:before, &:after
+		content: ""
+		position: absolute
+
+	&:before
+		size: 21px 1px
+		background: currentColor
+		top: calc(50% - 1px)
+
+	&:after
+		border-top: 1px solid currentColor
+		border-right: 1px solid currentColor
+		size: 9px
+		top: calc(50% - 5px)
+
+	&--left
+		padding-left: 79px
+
+		&:after
+			transform: rotateZ(-135deg)
+			left: 30px
+
+		&:before
+			left: 30px
+
+	&--right
+		padding-right: 79px
+
+		&:after
+			transform: rotateZ(45deg)
+			right: 30px
+
+		&:before
+			right: 30px
+
+.white-btn
+	color: var(--mainColor) #fff
+	display: inline-block
+	padding: 15px 26px 16px
+	line-height: 1
+	border-radius: 30px
+
+.fp-scroll
+	border-radius: 50%
+	border: none
+	background: var(--mainColor)
+	position: absolute * * 60px 60px
+	// display: inline-block
+	padding: 34px 0 35px
+	size: 69px
+	color: #fff
+	transition: background-color .3s ease, color .3s ease
+
+	&:after, &:before
+		content: ""
+		position: absolute
+
+	&:before
+		background: currentColor
+		size: 1px 24px
+		top: calc(50% - 12px)
+		left: calc(50% - 1px)
+
+	&:after
+		border-right: 1px solid currentColor
+		border-bottom: 1px solid currentColor
+		size: 9px
+		transform: rotate(45deg)
+		left: calc(50% - 5px)
+		bottom: calc(50% - 12px)
+
+.arrow-link
+	display: inline-block
+	size: 24px 11px
+	position: relative
+	color: var(--mainColor)
+
+	&:after, &:before
+		content: ""
+		position: absolute
+
+	&:before
+		background: currentColor
+		size: 100% 1px
+		top: calc(50% - 1px)
+		left: 0
+
+	&:after
+		border-right: 1px solid currentColor
+		border-bottom: 1px solid currentColor
+		size: 9px
+		transform: rotate(-45deg)
+		top: calc(50% - 5px)
+		right: 0
+
+.right-btn
+	position: fixed calc(50% - 26px) 0 * *
+	z-index: 5
+
+	&__link
+		display: block
+		transition: background .3s ease
+		background: url("../img/ico-right-btn-white.png") left 22px center no-repeat
+		background-color: var(--mainColor)
+		size: 69px 52px
+		border-radius: 32px 0 0 32px
+
+		&:hover, &:focus
+			background-color: lighten(#cb2b21, .1)
+
+.toggle-btn
+	border-radius: 50%
+	border: none
+	background: #f7f7f7
+	position: relative
+	size: 40px 
+	transition: color .3s ease, background .3s ease, transform .3s ease
+
+	&.active
+		transform: rotateZ(180deg)
+
+	&:after
+		content: ""
+		border-right: 2px solid currentColor
+		border-bottom: 2px solid currentColor
+		size: 10px
+		transform: rotateZ(45deg)
+		position: absolute calc(50% - 5px) * * calc(50% - 5px)
+
+	&:hover
+		color: #fff var(--mainColor)
+
+.message-btn
+	background: url("../img/ico-right-btn-red.png") center no-repeat, #fff
+	border-radius: 25px
+	display: inline-block
+	size: 72px 52px
+
+@media screen and (max-width: 1700px)
+	.fp-scroll
+		bottom: 30px
+		left: 30px
+		size: 40px
+		padding: 0
+
+		&:before
+			height: 10px
+			top: calc(50% - 5px)
+
+		&:after
+			size: 7px
+			left: calc(50% - 4px)
+			bottom: calc(50% - 6px)
+
+@media screen and (max-width: 1000px)
+	.default-btn
+		padding: 11px 20px 13px
+
+	.fp-scroll
+		bottom: 20px
+		left: calc(50% - 20px)
+
+@media screen and (max-width: 660px)
+	body
+
+		&:not(.page-404)
+			padding: 83px 0 0 !important
+
+	#content
+		transform: none !important
+		will-change: unset !important
+		height: auto !important
+
+	.fp-scroll
+		display: none
+
+	.right-btn
+		display: none
+
+		&__link
+			background: url("../img/ico-right-btn-red.png") center no-repeat
+			border-radius: 0
+			size: 40px
