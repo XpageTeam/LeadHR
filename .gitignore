@@ -1,4 +1,5 @@
 node_modules/
+accesses/
 dist/
 *.zip
 *.rar

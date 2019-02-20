@@ -8,26 +8,27 @@ const $ = require("gulp-load-plugins")(),
 	postcss = require("gulp-postcss"),
 	ftp = require("vinyl-ftp");
 
-let process = require("child_process");
+let process = require("child_process"),
+	connectionSettings = require("./accesses/accesses.js");
 
-const xpager_path = "/www/html.xpager.ru/LHR/",
+const xpager_path = "/www/html.xpager.ru/"+connectionSettings.xpager.dirName,
 xpager_conn = ftp.create({
-	host:      'html.xpager.ru',
-	user:      'file',
-	password:  'X9y7E5d0',
+	host:      connectionSettings.xpager.host,
+	user:      connectionSettings.xpager.file,
+	password:  connectionSettings.xpager.password,
 	parallel: 4,
 	log: gutil.log
 });
 
-const templatePath = "/htdocs/local/templates//";
+const templatePath = connectionSettings.server.path;
 const remotePathCss = templatePath+"css",
 	remotePathJs = templatePath+"js",
 	remotePathImg = templatePath+"img";
 
 const server_conn = ftp.create({
-	host:      '',
-	user:      '',
-	password:  '',
+	host:      connectionSettings.server.host,
+	user:      connectionSettings.server.user,
+	password:  connectionSettings.server.password,
 	parallel: 4,
 	log: gutil.log
 });
