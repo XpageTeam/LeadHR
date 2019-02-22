@@ -54,6 +54,10 @@ module.exports = [{
 	module: {
 		rules: [
 			{
+				test: require.resolve('snapsvg/dist/snap.svg.js'),
+				use: 'imports-loader?this=>window,fix=>module.exports=0',
+			},
+			{
 				test: /\.js$/,
 				loader: "babel-loader",
 				query: {
@@ -87,10 +91,10 @@ module.exports = [{
 			}
 		]
 	},
-	// resolve: {
-	// 	alias: {
-	// 		vue$: "vue/dist/vue.esm.js",
-	// 	}
-	// },
+	resolve: {
+		alias: {
+			snapsvg: 'snapsvg/dist/snap.svg.js',
+		}
+	},
 	plugins: plugins
 }];

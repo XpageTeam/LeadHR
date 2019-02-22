@@ -102,7 +102,16 @@ gulp.task("postcss", _ =>
 
 gulp.task("pug", _ => 
 	gulp.src("src/pug/*.pug")
-		.pipe($.pug({pretty: true}))
+		.pipe($.plumber({
+			errorHandler: $.notify.onError()
+		}))
+		.pipe($.pug({
+			plugins: [$.pugbem]
+		}))
+		.pipe(require("gulp-html-beautify")({
+			indentSize: 4,
+			indent_with_tabs: true,
+		}))
 		.pipe(gulp.dest("dist"))
 );
 

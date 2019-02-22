@@ -30,6 +30,12 @@
 	.wrapper
 		width: 100%
 
+	&__decors
+
+		.canvas
+			position: absolute 0 0 0 *
+			size: vw(1055) auto
+
 .main-nav
 	display: flex
 	align-items: center
@@ -127,16 +133,28 @@
 	flex: 1 1 auto
 	display: flex
 	flex-direction: column
+	position: relative
+	justify-content: center
 
 	&__sheets
 		flex: 1 1 auto
-		position: relative
-		transition: transform .1s ease
+		transition: transform 2s ease
+		size: 100% calc(100vh - 200px)
+		position: absolute 0
 
 		.ico
-			size: 100% calc(100vh - 200px)
+			size: 100%
 			position: absolute 50% * * 50%
-			transform: translate3d(-43%, -43%, 0)
+			transform: translate3d(-50%, -60%, 0)
+
+	&__man
+		display: flex
+		justify-content: center
+		align-items: center
+
+		.ico
+			size: 200px 330px
+			margin: 0 16vw 20vh 0
 
 .page-text
 	max-width: 560px
@@ -157,3 +175,12 @@
 	.ico
 		size: 100% 
 		transform: translate3d(36px, -36px, 0)
+
+
+.main
+
+	&__svg
+		position: absolute 0 0 0 0
+		// size
+		z-index: 20
+		// pointer-events: none
