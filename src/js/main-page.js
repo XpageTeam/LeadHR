@@ -1,12 +1,15 @@
 import fullpage from "./fullpage.js"
 import is from "is_js"
-import Span from "snapsvg"
+import customEase from "./CustomEase.js"
 import {TweenLite} from "gsap/TweenMax"
 
 if (document.querySelector("body").classList.contains("main"))
 	require("../css/fullpage.css")
 
 require("./MorphSVGPlugin.min.js")
+
+const myEase = CustomEase.create("custom", "M0,0 C0.126,0.382 0.162,0.822 0.362,0.906 0.586,1 0.818,1 1,1");
+let currentPlaneState = 0;
 
 document.addEventListener("DOMContentLoaded", e => {
 	if (!document.body.classList.contains("main"))
@@ -21,6 +24,9 @@ document.addEventListener("DOMContentLoaded", e => {
 
 	for (var anch of anchItems)
 		anchors.push(anch.getAttribute("data-anchor"))
+
+	const planes = document.querySelectorAll("#smallPlane, #midPlane, #botPlane"),
+		ways = document.querySelectorAll("#ways path");
 
 	if (!is.mobile())
 		window.fullpage = new fullpage("#content", {
@@ -90,10 +96,65 @@ document.addEventListener("DOMContentLoaded", e => {
 
 			//события
 			onLeave: function(origin, destination, direction){
+				const nextScreenIndex = destination.index;
+
+				if (direction != "down" || currentPlaneState >= nextScreenIndex)
+					return
+
+				currentPlaneState = nextScreenIndex
+
+				console.log(currentPlaneState)
+
+				switch (nextScreenIndex){
+					case 1:
+						let isMorphed = false;
+
+						wayAnimating(planes[0], ways[1], 2, tween => {
+							if (tween.progress() >= 0.09 && !isMorphed){
+								let planeWings = planes[0].querySelectorAll("path"),
+									completeWings = planes[1].querySelectorAll("path");
+
+								for (let i = 0; i < planeWings.length; i++)
+									TweenLite.to(planeWings[i], .8, {
+										morphSVG: completeWings[i],
+										onUpdate(){
+											let pos = smallPlane.getBoundingClientRect();
+											
+											planes[0].style.transformOrigin = Math.round(pos.width / 8) + "px " + Math.round(pos.height / 8) + "px"
+										}
+									})
+
+								isMorphed = true
+							}
+						}, myEase)
+
+					break;
+
+					case 2:
+
+
+					break;
+				}
 			},
-			afterLoad: function(origin, destination, direction){
-				document.body.classList.remove("loading")
-				document.body.classList.add("loaded")
+			afterRender(){
+				let {width, height} = getElementSizes(planes[0]);
+				planes[0].style.transformOrigin = Math.round(width / 4) + "px " + Math.round(height / 4) + "px"
+				
+				TweenLite.set(planes[0], {
+					scale: 0,
+				})
+
+				setTimeout(e => {
+					document.body.classList.remove("loading")
+					document.body.classList.add("loaded")
+				}, 200)
+
+				TweenLite.to(planes[0], 1, {
+					scale: 1
+				})
+
+				wayAnimating(planes[0], ways[0], 0, _ => {}, myEase)
+
 
 				;(function(){
 					let main = document.querySelector("#content"),
@@ -103,25 +164,20 @@ document.addEventListener("DOMContentLoaded", e => {
 						return
 
 					main.addEventListener("mousemove", e => {
-						let pos = {
-					      x: 0,
-					      y: 0,
-					    };
+						let pos = {};
 
 					    pos.x = (e.pageX - sheetsSvg.clientWidth / 2) * -1 / 55;
 					    pos.y = (e.pageY - sheetsSvg.clientHeight / 2) * -1 / 55;
 
-					    sheetsSvg.style.transform = "translate3d("+pos.x+"px, "+pos.y+"px, 0)"
+					    TweenLite.to(sheetsSvg, 3, {
+					    	x: pos.x,
+					    	y: pos.y
+					    })
 					})
 				})()
 			},
-			afterRender: function(){},
 			afterResize: function(width, height){},
 			afterResponsive: function(isResponsive){},
-			afterSlideLoad: function(section, origin, destination, direction){},
-			onSlideLeave: function(section, origin, destination, direction){
-				
-			}
 		})
 	else{
 		document.body.classList.remove("loading")
@@ -131,167 +187,114 @@ document.addEventListener("DOMContentLoaded", e => {
 
 document.addEventListener("DOMContentLoaded", e => {
 	;(function(){
-		// let svg = document.querySelector(".line-svg svg");
 
-		// if (!svg)
-		// 	return
+		// MorphSVGPlugin.convertToPath("circle, rect, ellipse, line, polygon, polyline, #big");
 
-		// let s, path, length, circle;
 
-		// s = Snap(svg)
+		const planes = document.querySelectorAll("#smallPlane, #midPlane, #botPlane"),
+			ways = document.querySelectorAll("#ways path")
 
-		// path = svg.querySelector("path:first-child")
+		let pos = smallPlane.getBoundingClientRect();
+		
+		planes[0].style.transformOrigin = Math.round(pos.width / 2) + "px " + Math.round(pos.height / 2) + "px"
 
-		// length = path.getTotalLength();
+		let path = MorphSVGPlugin.pathDataToBezier(ways[0], {
+			align: planes[0],
+		});
+		
+		TweenLite.set(planes[0], {
+			scale: 0,
+		})
 
-		// circle = s.circle(30,30,15)
+		TweenLite.to(planes[0], 1, {
+			scale: 1
+		})
 
-		// circle.attr({
-		//   fill: "#3f4445",
-		//   stroke: "#25292a",
-		//   strokeWidth: 3
-		// })
 
-		// let pointsArray = new Array();
+		TweenLite.to(planes[0], 4,{
+			bezier: {
+				values: path,
+				type: "cubic",
+				autoRotate: 0
+			},
+			onComplete(){
+				path = MorphSVGPlugin.pathDataToBezier(ways[1], {
+					align: planes[0],
+				})
 
-		// length = Math.round(length)
+				let isMorphed = false;
 
-		// for (let i = length / 2; i < length; i++){
-		// 	let movePoint = path.getPointAtLength( i );
+				let tween = TweenLite.to(planes[0], 3, {
+					bezier: {
+						values: path,
+						type: "cubic",
+						autoRotate: 0
+					},
+					onUpdate: function(){
+						if (this.progress() >= 0.25 && !isMorphed){
+							let planeWings = planes[0].querySelectorAll("path"),
+								completeWings = planes[1].querySelectorAll("path");
 
-		//        pointsArray.push(movePoint)
-		// }
+							for (let i = 0; i < planeWings.length; i++)
+								TweenLite.to(planeWings[i], 1, {
+									morphSVG: completeWings[i],
+									onUpdate(){
+										let pos = smallPlane.getBoundingClientRect();
+										
+										planes[0].style.transformOrigin = Math.round(pos.width / 8) + "px " + Math.round(pos.height / 8) + "px"
+									}
+								})
 
-		// circle.attr({ cx: pointsArray[0].x, cy: pointsArray[0].y })
-
-		// let counter = 0, interval = setInterval(_ => {
-		// 	circle.attr({ cx: pointsArray[counter].x, cy: pointsArray[counter].y })
-
-		// 	if (counter >= length / 2)
-		// 		clearInterval(interval)
-		// 	else
-		// 		counter++
-		// }, 10)
-
-		// setTimeout( function() {
-		    // Snap.animate(0, length / 2, function( value ) {
-		    //    let movePoint = path.getPointAtLength( value );
-
-		    //    circle.attr({
-		    //    	cx: movePoint.x,
-		    //    	cy: movePoint.y
-		    //    })
-
-		    // }, 10000);
-		// })
-
-		MorphSVGPlugin.convertToPath("circle, rect, ellipse, line, polygon, polyline, #big");
-
-		// TweenLite.to("#smallPlane", 2, {
-		// 	morphSVG: "#midPlane"
-		// })
-
-	})()
+							isMorphed = true
+						}
+					},
+				})
+			},
+			ease: myEase
+		})
+	})
 })
 
-class Canvas{
-	set id(selector){
-		this._id = selector
-		this.el = document.querySelector(selector)
+const wayAnimating = (plane, way, rotateFix = 0, onUpdate = _ => {}, ease = false) => {
+	let path = getPath(way, plane);
 
-		this.updateSizes()
-	}
-	get id(){
-		return this._id
-	}
-
-	set sizes(sizes){
-		if (!sizes){
-			this.error("Неверно переданы размеры")
-			return
+	let config = {
+		bezier: {
+			values: path,
+			type: "cubic",
+			autoRotate: rotateFix
+		},
+		onUpdate(){
+			onUpdate(this)
+		},
+		onComplete(){
+			window.currentTween = false
 		}
+	};
 
-		if (!sizes.width || !sizes.height){
-			this.error("Неверно переданы размеры")
-			return
-		}
+	if (ease)
+		config.ease = ease
 
-		this._sizes = sizes;
+	if (window.currentTween){
+		window.currentTween.kill()
 
-		this.el.setAttribute("width", !isNaN(sizes.width) ? Math.round(sizes.width) + "px" : sizes.width)
-		this.el.setAttribute("height", !isNaN(sizes.height) ? Math.round(sizes.height) + "px" : sizes.height)
-	}
-	get sizes(){
-		return this._siezes
-	}
-
-	constructor(id, name = "какой-то канвас"){
-		this.name = name
-		this.id = id
-
-		this.context = this.el.getContext("2d")
-	}
-
-	printImage(src = "", pos = {top: 0, left: 0}){
-		if (!src){
-			this.error("Нет ссылки на картинку")
-			return
-		}
-
-		let img = new Image(),
-			ctx = this.context;
-
-		img.src = src
-
-		img.addEventListener("load", function(){
-			
-
-			ctx.drawImage(this, pos.top, pos.left)
+		window.currentTween = TweenLite.to(plane, .1, {
+			x: path[0].x,
+			y: path[0].y,
+			onComplete(){
+				window.currentTween = TweenLite.to(plane, 4, config)
+			}
 		})
+
+		return
 	}
 
-	updateSizes(){
-		let rect = this.el.closest("div").getBoundingClientRect()
-
-		this.sizes = {
-			width: rect.width,
-			height: rect.height
-		}
-
-		console.log(this.sizes)
-	}
-
-	error(message){
-		console.group(this.name)
-			console.error(message)
-		console.groupEnd()
-	}
-}
-
-
-
-
-class navCanvas extends Canvas{
-	printImage(src = "", pos = {top: 0, left: 0}){
-		if (!src){
-			this.error("Нет ссылки на картинку")
-			return
-		}
-
-		let img = new Image(),
-			ctx = this.context,
-			sizes = this.sizes;
-
-		img.src = src
-
-		img.addEventListener("load", function(){
-			let top = sizes.height / 2 - this.height / 2
-
-			ctx.drawImage(this, top, pos.left)
-		})
-	}
-}
-
-// window.canvas = new navCanvas("#top-canvas", "Верхний")
-
-// canvas.printImage("img/ico-man.svg")
+	window.currentTween = TweenLite.to(plane, 4, config)
+},
+getPath = (way, alignItem) => MorphSVGPlugin.pathDataToBezier(way, {
+	align: alignItem,
+}),
+getElementSizes = element => ({
+	width: element.getBoundingClientRect().width,
+	height: element.getBoundingClientRect().height 
+})
