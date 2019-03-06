@@ -8,7 +8,24 @@ if (document.querySelector("body").classList.contains("main"))
 
 require("./MorphSVGPlugin.min.js")
 
-const myEase = CustomEase.create("custom", "M0,0 C0.126,0.382 0.162,0.822 0.362,0.906 0.586,1 0.818,1 1,1");
+const myEase = CustomEase.create("custom", "M0,0 C0.126,0.382 0.162,0.822 0.362,0.906 0.586,1 0.818,1 1,1"),
+	resolutionsCutch = [],
+	pagesCount = document.querySelectorAll(".page").length;
+
+const resizeSceneSvg = _ => {
+	const elements = document.querySelectorAll("#scene, #clip0 rect"),
+		main = document.querySelector("#content");
+
+	for (var element of elements){
+		element.setAttribute("width", main.clientWidth)
+		element.setAttribute("height", main.clientHeight * pagesCount)
+	}
+};
+
+window.addEventListener("resize", resizeSceneSvg)
+window.addEventListener("load", resizeSceneSvg)
+
+
 let currentPlaneState = 0;
 
 document.addEventListener("DOMContentLoaded", e => {
@@ -103,13 +120,11 @@ document.addEventListener("DOMContentLoaded", e => {
 
 				currentPlaneState = nextScreenIndex
 
-				console.log(currentPlaneState)
-
 				switch (nextScreenIndex){
 					case 1:
 						let isMorphed = false;
 
-						wayAnimating(planes[0], ways[1], 2, tween => {
+						wayAnimating(planes[0], ways[1], 2, 4, tween => {
 							if (tween.progress() >= 0.09 && !isMorphed){
 								let planeWings = planes[0].querySelectorAll("path"),
 									completeWings = planes[1].querySelectorAll("path");
@@ -120,7 +135,7 @@ document.addEventListener("DOMContentLoaded", e => {
 										onUpdate(){
 											let pos = smallPlane.getBoundingClientRect();
 											
-											planes[0].style.transformOrigin = Math.round(pos.width / 8) + "px " + Math.round(pos.height / 8) + "px"
+											planes[0].style.transformOrigin = Math.round(pos.width / 10) + "px " + Math.round(pos.height / 10) + "px"
 										}
 									})
 
@@ -131,7 +146,114 @@ document.addEventListener("DOMContentLoaded", e => {
 					break;
 
 					case 2:
+						wayAnimating(planes[0], ways[2], 12, 4, tween => {
+							if (tween.progress() >= 0.09 && !isMorphed){
+								let planeWings = planes[0].querySelectorAll("path"),
+									completeWings = planes[2].querySelectorAll("path");
 
+								for (let i = 0; i < planeWings.length; i++)
+									TweenLite.to(planeWings[i], .8, {
+										morphSVG: completeWings[i],
+										onUpdate(){
+											let pos = smallPlane.getBoundingClientRect();
+											
+											planes[0].style.transformOrigin = Math.round(pos.width / 24) + "px " + Math.round(pos.height / 24) + "px"
+										}
+									})
+
+								isMorphed = true
+							}
+						}, myEase)
+
+					break;
+
+					case 3:
+						let lastMorph = false;
+
+						wayAnimating(planes[0], ways[3], 12, .5, tween => {
+							if (tween.progress() >= 0.09 && !isMorphed){
+								let planeWings = planes[0].querySelectorAll("path"),
+									completeWings = planes[2].querySelectorAll("path");
+
+								for (let i = 0; i < planeWings.length; i++)
+									TweenLite.to(planeWings[i], .8, {
+										morphSVG: completeWings[i],
+										onUpdate(){
+											let pos = smallPlane.getBoundingClientRect();
+											
+											planes[0].style.transformOrigin = Math.round(pos.width / 16) + "px " + Math.round(pos.height / 16) + "px"
+										}
+									})
+
+								isMorphed = true
+							}
+
+							if (tween.progress() >= .3 && !lastMorph){
+								let scaleStarted = false;
+
+								TweenLite.to(planes[0], .5, {
+									scale: 0,
+									onUpdate(){
+										if (!scaleStarted && this.progress() >= .7){
+
+											;(function(){
+												const resume = document.querySelector("#resume");
+
+												if (!resume)
+													return
+
+												const resumeTitle = resume.querySelector("#resume-title"),
+													resumeLines = resume.querySelectorAll("#resume-lines path"),
+													resumePaper = resume.querySelector("#resume-paper"),
+													resumeDots = {
+														left: resume.querySelector("#resume-leftDot"),
+														right: resume.querySelector("#resume-rightDot")
+													};
+
+												TweenLite.to(resumePaper, .3, {
+													scale: 1,
+													onComplete(){
+														TweenLite.to(resumeTitle, .6, {
+															opacity: 1
+														})
+
+														let i = 0;
+
+														for (var line of resumeLines){
+															TweenLite.to(line, .14, {
+																scaleX: 1,
+																delay: .1 * i,
+																onComplete(){
+																	if (i == resumeLines.length){
+																		TweenLite.to(resumeDots.left, .3, {
+																			scale: 1,
+																			ease: Back.easeOut.config(4)
+																		})
+
+																		TweenLite.to(resumeDots.right, .3, {
+																			scale: 1,
+																			delay: .2,
+																			ease: Back.easeOut.config(4)
+																		})
+																	}
+																}
+															})
+
+															i++
+														}
+													},
+													ease: Back.easeOut.config(1.8)
+												})
+											})()
+
+											scaleStarted = true
+										}
+									}
+								})
+
+								lastMorph = true
+							}
+						}, Power1.easeOut)
 
 					break;
 				}
@@ -150,15 +272,19 @@ document.addEventListener("DOMContentLoaded", e => {
 				}, 200)
 
 				TweenLite.to(planes[0], 1, {
-					scale: 1
+					scale: 1,
+					onUpdate(){
+						let {width, height} = getElementSizes(planes[0]);
+						planes[0].style.transformOrigin = Math.round(width / 4) + "px " + Math.round(height / 4) + "px"
+					}
 				})
 
-				wayAnimating(planes[0], ways[0], 0, _ => {}, myEase)
+				wayAnimating(planes[0], ways[0], 0, 4, _ => {}, myEase)
 
 
 				;(function(){
 					let main = document.querySelector("#content"),
-						sheetsSvg = document.querySelector(".main-decor__sheets");
+						sheetsSvg = document.querySelector("#sheets");
 
 					if (!main || !sheetsSvg)
 						return
@@ -175,6 +301,46 @@ document.addEventListener("DOMContentLoaded", e => {
 					    })
 					})
 				})()
+
+				;(function(){
+					const resume = document.querySelector("#resume");
+
+					if (!resume)
+						return
+
+					const resumeTitle = resume.querySelector("#resume-title"),
+						resumeLines = resume.querySelectorAll("#resume-lines path"),
+						resumePaper = resume.querySelector("#resume-paper"),
+						resumeDots = {
+							left: resume.querySelector("#resume-leftDot"),
+							right: resume.querySelector("#resume-rightDot")
+						};
+
+					TweenLite.set(resumeTitle, {
+						opacity: 0,
+						transformOrigin: "center"
+					})
+
+					for (var line of resumeLines)
+						TweenLite.set(line, {
+							scaleX: 0,
+						})
+
+					TweenLite.set(resumeDots.left, {
+						scale: 0,
+						transformOrigin: "center"
+					})
+
+					TweenLite.set(resumeDots.right, {
+						scale: 0,
+						transformOrigin: "center"
+					})
+
+					TweenLite.set(resumePaper, {
+						scale: 0,
+						transformOrigin: "center"
+					})
+				})()
 			},
 			afterResize: function(width, height){},
 			afterResponsive: function(isResponsive){},
@@ -185,77 +351,7 @@ document.addEventListener("DOMContentLoaded", e => {
 	}
 })
 
-document.addEventListener("DOMContentLoaded", e => {
-	;(function(){
-
-		// MorphSVGPlugin.convertToPath("circle, rect, ellipse, line, polygon, polyline, #big");
-
-
-		const planes = document.querySelectorAll("#smallPlane, #midPlane, #botPlane"),
-			ways = document.querySelectorAll("#ways path")
-
-		let pos = smallPlane.getBoundingClientRect();
-		
-		planes[0].style.transformOrigin = Math.round(pos.width / 2) + "px " + Math.round(pos.height / 2) + "px"
-
-		let path = MorphSVGPlugin.pathDataToBezier(ways[0], {
-			align: planes[0],
-		});
-		
-		TweenLite.set(planes[0], {
-			scale: 0,
-		})
-
-		TweenLite.to(planes[0], 1, {
-			scale: 1
-		})
-
-
-		TweenLite.to(planes[0], 4,{
-			bezier: {
-				values: path,
-				type: "cubic",
-				autoRotate: 0
-			},
-			onComplete(){
-				path = MorphSVGPlugin.pathDataToBezier(ways[1], {
-					align: planes[0],
-				})
-
-				let isMorphed = false;
-
-				let tween = TweenLite.to(planes[0], 3, {
-					bezier: {
-						values: path,
-						type: "cubic",
-						autoRotate: 0
-					},
-					onUpdate: function(){
-						if (this.progress() >= 0.25 && !isMorphed){
-							let planeWings = planes[0].querySelectorAll("path"),
-								completeWings = planes[1].querySelectorAll("path");
-
-							for (let i = 0; i < planeWings.length; i++)
-								TweenLite.to(planeWings[i], 1, {
-									morphSVG: completeWings[i],
-									onUpdate(){
-										let pos = smallPlane.getBoundingClientRect();
-										
-										planes[0].style.transformOrigin = Math.round(pos.width / 8) + "px " + Math.round(pos.height / 8) + "px"
-									}
-								})
-
-							isMorphed = true
-						}
-					},
-				})
-			},
-			ease: myEase
-		})
-	})
-})
-
-const wayAnimating = (plane, way, rotateFix = 0, onUpdate = _ => {}, ease = false) => {
+const wayAnimating = (plane, way, rotateFix = 0, time = 4, onUpdate = _ => {}, ease = false) => {
 	let path = getPath(way, plane);
 
 	let config = {
@@ -278,18 +374,18 @@ const wayAnimating = (plane, way, rotateFix = 0, onUpdate = _ => {}, ease = fals
 	if (window.currentTween){
 		window.currentTween.kill()
 
-		window.currentTween = TweenLite.to(plane, .1, {
+		window.currentTween = TweenLite.to(plane, .2, {
 			x: path[0].x,
 			y: path[0].y,
 			onComplete(){
-				window.currentTween = TweenLite.to(plane, 4, config)
+				window.currentTween = TweenLite.to(plane, time, config)
 			}
 		})
 
 		return
 	}
 
-	window.currentTween = TweenLite.to(plane, 4, config)
+	window.currentTween = TweenLite.to(plane, time, config)
 },
 getPath = (way, alignItem) => MorphSVGPlugin.pathDataToBezier(way, {
 	align: alignItem,

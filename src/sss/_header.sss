@@ -5,7 +5,8 @@
 		z-index: 10
 
 .head
-	padding: 90px 0 60px
+	padding: 90px 0 65px
+	padding: 90px 0 17px
 
 	&__wrap
 		display: flex
@@ -58,3 +59,21 @@
 
 	&:focus, &.js__active
 		color: var(--mainColor)
+
+
+
+@media screen and (min-width: 1921px)
+	.logo
+		display: block
+
+		img
+			width: vw(160)
+
+	.h-phone
+		font-size: vw(18)
+
+	.burger
+		size: vw(23) vw(18)
+
+	.head
+		padding: vh(90) 0 vh(17)

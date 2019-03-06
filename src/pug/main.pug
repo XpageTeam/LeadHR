@@ -20,12 +20,12 @@ html(lang="ru")
 									each title in ["Вакансии", "Компаниям", "Отправить резюме", "Обучение", "Блог", ]
 										li.main-nav__item
 											a.main-nav__link(href="#")=title
-								._decor
+								//- ._decor
 									.main-decor
 										._sheets
 											svg.ico
 												use(xlink:href="#ico-sheets")
-						._decors
+						//- ._decors
 							.puddles
 								svg.ico
 									use(xlink:href="#ico-puddles")
@@ -62,7 +62,7 @@ html(lang="ru")
 				._content.-white
 					.page-content
 						.wrapper
-							nav.main-nav
+							nav.main-nav.-not-flex
 								._title Направления
 								ul._menu
 									each title in ["Разработка", "Дизайн", "Маркетинг", "Клиентский сервис", "Другие направления", ]
