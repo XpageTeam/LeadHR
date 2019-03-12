@@ -41,22 +41,21 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = [{
-	entry: [
-		"babel-polyfill",
-		"./src/js/common.js",
-	],
+	entry: {
+		common: [
+			"babel-polyfill",
+			"./src/js/common.js",
+		],
+		"main-page": "./src/js/main-page.js",
+	},
 	output: {
-		filename: "common.js",
+		filename: "[name].js",
 		path: path.resolve(__dirname, "./dist/js/"),
 	},
 	watch: watch,
 	devtool: devtool,
 	module: {
 		rules: [
-			{
-				test: require.resolve('snapsvg/dist/snap.svg.js'),
-				use: 'imports-loader?this=>window,fix=>module.exports=0',
-			},
 			{
 				test: /\.js$/,
 				loader: "babel-loader",
@@ -91,10 +90,10 @@ module.exports = [{
 			}
 		]
 	},
-	resolve: {
-		alias: {
-			snapsvg: 'snapsvg/dist/snap.svg.js',
-		}
-	},
+	// resolve: {
+	// 	alias: {
+	// 		snapsvg: 'snapsvg/dist/snap.svg.js',
+	// 	}
+	// },
 	plugins: plugins
 }];

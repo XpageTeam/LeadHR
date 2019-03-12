@@ -9,16 +9,21 @@ if (document.querySelector("body").classList.contains("main"))
 require("./MorphSVGPlugin.min.js")
 
 const myEase = CustomEase.create("custom", "M0,0 C0.126,0.382 0.162,0.822 0.362,0.906 0.586,1 0.818,1 1,1"),
-	resolutionsCutch = [],
+	resolutionsCutch = {
+		first: 2.75,
+		second: 6.5,
+		thrid: 9.4,
+		fourth: 7
+	},
 	pagesCount = document.querySelectorAll(".page").length;
 
 const resizeSceneSvg = _ => {
-	const elements = document.querySelectorAll("#scene, #clip0 rect"),
+	const elements = document.querySelectorAll("#scene"),
 		main = document.querySelector("#content");
 
 	for (var element of elements){
-		element.setAttribute("width", main.clientWidth)
-		element.setAttribute("height", main.clientHeight * pagesCount)
+		// element.setAttribute("width", main.clientWidth)
+		// element.setAttribute("height", main.clientHeight * pagesCount)
 	}
 };
 
@@ -133,9 +138,7 @@ document.addEventListener("DOMContentLoaded", e => {
 									TweenLite.to(planeWings[i], .8, {
 										morphSVG: completeWings[i],
 										onUpdate(){
-											let pos = smallPlane.getBoundingClientRect();
-											
-											planes[0].style.transformOrigin = Math.round(pos.width / 10) + "px " + Math.round(pos.height / 10) + "px"
+											updateTRO(planes[0], resolutionsCutch.second)
 										}
 									})
 
@@ -155,9 +158,7 @@ document.addEventListener("DOMContentLoaded", e => {
 									TweenLite.to(planeWings[i], .8, {
 										morphSVG: completeWings[i],
 										onUpdate(){
-											let pos = smallPlane.getBoundingClientRect();
-											
-											planes[0].style.transformOrigin = Math.round(pos.width / 24) + "px " + Math.round(pos.height / 24) + "px"
+											updateTRO(planes[0], resolutionsCutch.thrid)
 										}
 									})
 
@@ -179,9 +180,7 @@ document.addEventListener("DOMContentLoaded", e => {
 									TweenLite.to(planeWings[i], .8, {
 										morphSVG: completeWings[i],
 										onUpdate(){
-											let pos = smallPlane.getBoundingClientRect();
-											
-											planes[0].style.transformOrigin = Math.round(pos.width / 16) + "px " + Math.round(pos.height / 16) + "px"
+											updateTRO(planes[0], resolutionsCutch.fourth)
 										}
 									})
 
@@ -259,8 +258,7 @@ document.addEventListener("DOMContentLoaded", e => {
 				}
 			},
 			afterRender(){
-				let {width, height} = getElementSizes(planes[0]);
-				planes[0].style.transformOrigin = Math.round(width / 4) + "px " + Math.round(height / 4) + "px"
+				updateTRO(planes[0], resolutionsCutch.first)
 				
 				TweenLite.set(planes[0], {
 					scale: 0,
@@ -274,8 +272,7 @@ document.addEventListener("DOMContentLoaded", e => {
 				TweenLite.to(planes[0], 1, {
 					scale: 1,
 					onUpdate(){
-						let {width, height} = getElementSizes(planes[0]);
-						planes[0].style.transformOrigin = Math.round(width / 4) + "px " + Math.round(height / 4) + "px"
+						updateTRO(planes[0], resolutionsCutch.first)
 					}
 				})
 
@@ -393,4 +390,8 @@ getPath = (way, alignItem) => MorphSVGPlugin.pathDataToBezier(way, {
 getElementSizes = element => ({
 	width: element.getBoundingClientRect().width,
 	height: element.getBoundingClientRect().height 
-})
+}),
+updateTRO = (element, cutch) => {
+	let {width, height} = getElementSizes(element);
+	element.style.transformOrigin = (width / cutch / window.innerWidth * 100) + "vw " + (height / cutch / window.innerWidth * 100) + "vw"
+}
