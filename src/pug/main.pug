@@ -69,6 +69,9 @@ html(lang="ru")
 										li.main-nav__item
 											a.main-nav__link(href="#")=title
 		#sprite(style="display: none")
+			<!-- Эту свг нужно вставлять инклюдом, т.к. она может меняться -->
 			include symbol/sprite.svg
 		include inc/scripts.pug
+
+		<!-- Этот скрипт подключать только для главной -->
 		script(src="js/main-page.js")

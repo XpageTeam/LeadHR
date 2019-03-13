@@ -19,12 +19,18 @@ const myEase = CustomEase.create("custom", "M0,0 C0.126,0.382 0.162,0.822 0.362,
 
 const resizeSceneSvg = _ => {
 	const elements = document.querySelectorAll("#scene"),
-		main = document.querySelector("#content");
+		main = document.querySelector("#content"),
+		sceneContent = document.querySelector("#scene-content");
 
-	for (var element of elements){
+	if (window.matchMedia("screen and (min-width: 1920px)").matches)
+	TweenLite.set(sceneContent, {
+		y: -sceneContent.getBoundingClientRect().top - 100
+	})
+
+	// for (var element of elements){
 		// element.setAttribute("width", main.clientWidth)
 		// element.setAttribute("height", main.clientHeight * pagesCount)
-	}
+	// }
 };
 
 window.addEventListener("resize", resizeSceneSvg)
