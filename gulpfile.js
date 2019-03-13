@@ -16,6 +16,14 @@ const remotePathCss = templatePath+"css",
 	remotePathJs = templatePath+"js",
 	remotePathImg = templatePath+"img";
 
+const xpager_conn = ftp.create({
+	host:      connectionSettings.xpager.host,
+	user:      connectionSettings.xpager.user,
+	password:  connectionSettings.xpager.password,
+	parallel: 4,
+	log: gutil.log
+});
+
 const server_conn = ftp.create({
 	host:      connectionSettings.server.host,
 	user:      connectionSettings.server.user,
@@ -164,7 +172,7 @@ gulp.task("deploy:img", () =>
 
 gulp.task("deploy:dist", _ => 
 	gulp.src("dist/**/*.*", {buffer: false})
-		.pipe(xpager_conn.dest(xpager_path))
+		.pipe(xpager_conn.dest(connectionSettings.xpager.dirName))
 );
 
 gulp.task("deploy", gulp.series(gulp.parallel("postcss", "pug", "imagemin"), "deploy:dist"));
